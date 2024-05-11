@@ -168,8 +168,9 @@ function Features() {
       </div>
       <div className={styles.requestFormContainer}>
         <h2>Feature Request Form</h2>
-        <form onSubmit={handleRequestSubmit}>
-          <TextField
+        <form className={styles.requestForm} onSubmit={handleRequestSubmit}>
+        <div className={styles.requestFormFields}>
+          <TextField className={styles.nameEntryField}
             variant="filled"
             type="text"
             name="name"
@@ -180,7 +181,10 @@ function Features() {
             onChange={handleRequestChange}
           />
           <TextField
+            className={styles.descriptionEntryField}
             variant="filled"
+            id="outlined-multiline-static"
+            multiline
             type="text"
             name="description"
             label="description"
@@ -188,10 +192,15 @@ function Features() {
             autoComplete="off"
             value={requestFormData.description}
             onChange={handleRequestChange}
+            
           />
+          </div>
+
+          <div className={styles.requestFormButtons}>
           <button className={styles.blueButton} type="submit">
             Submit
           </button>
+          </div>
         </form>
       </div>
 

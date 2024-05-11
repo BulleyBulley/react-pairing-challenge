@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { TextField, stepLabelClasses } from "@mui/material";
+import { Input, InputGroup, InputLeftAddon, InputRightAddon, Textarea, FormControl, FormLabel, Select } from '@chakra-ui/react'
+import { Button } from "@chakra-ui/react"
 import { Feature } from "../utils/objects";
 import { getAllFeatures, getAllUsers, postFeature } from "./featuresApi";
 import { User } from "../utils/objects";
@@ -59,6 +60,11 @@ function Features() {
   };
 
   const handleRequestChange = (e) => {
+    //prevent enter key from submitting the form
+    if (e.keyCode === 13) {
+      return;
+    }
+
     setRequestFormData({
       ...requestFormData,
       [e.target.name]: e.target.value,
@@ -158,48 +164,58 @@ function Features() {
   return (
     <div className={styles.requestContainer}>
       <div className={styles.currentUser}>
-        <select onChange={handleChangeUser}>
+        <Select onChange={handleChangeUser}
+        variant='filled' 
+        placeholder='select user'
+        display="flex"
+        justifyContent='flex-end' >
           {users.map((user) => (
             <option key={user.userId} value={user.userId}>
               {user.name}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
       <div className={styles.requestFormContainer}>
         <h2>Feature Request Form</h2>
         <form className={styles.requestForm} onSubmit={handleRequestSubmit}>
         <div className={styles.requestFormFields}>
-          <TextField className={styles.nameEntryField}
-            variant="filled"
-            type="text"
-            name="name"
-            label="name"
-            data-testid="name-entry-field"
-            autoComplete="off"
-            value={requestFormData.name}
-            onChange={handleRequestChange}
-          />
-          <TextField
+        <InputGroup>
+        <InputLeftAddon>Name</InputLeftAddon>
+        <Input className={styles.nameEntryField}
+         placeholder="name" 
+          type="text"
+          name="name"
+          required='true'
+          data-testid="name-entry-field"
+          autoComplete="off"
+          value={requestFormData.name}
+          onChange={handleRequestChange}
+        />
+        </InputGroup>
+        <InputGroup>
+        <InputLeftAddon>Description</InputLeftAddon>
+         
+          <Textarea
             className={styles.descriptionEntryField}
-            variant="filled"
-            id="outlined-multiline-static"
-            multiline
+            placeholder="description "
             type="text"
             name="description"
-            label="description"
+            required='true'
+            size="lg"
             data-testid="description-entry-field"
             autoComplete="off"
             value={requestFormData.description}
             onChange={handleRequestChange}
             
           />
+          </InputGroup>
           </div>
 
           <div className={styles.requestFormButtons}>
-          <button className={styles.blueButton} type="submit">
+          <Button colorScheme="blue" className={styles.basicButton} type="submit">
             Submit
-          </button>
+          </Button>
           </div>
         </form>
       </div>
@@ -232,18 +248,19 @@ function Features() {
                     <h4>Votes: {feature.votes.length}</h4>
                   </div>
                   <div className={styles.featureButtons}>
-                    <button
-                      className={styles.greenButton}
+                    <Button
+                      colorScheme="teal" className={styles.featureButton}
                       onClick={() => handleAboutClick(feature.id)}
                     >
                       About
-                    </button>
-                    <button
-                      className={styles.greenButton}
+                    </Button>
+                    <Button
+                      colorScheme="yellow" className={styles.featureButton}
                       onClick={() => handleVote(feature.id)}
+                      
                     >
                       Vote
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </li>

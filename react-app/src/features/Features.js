@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { TextField } from "@mui/material";
+import { TextField, stepLabelClasses } from "@mui/material";
 import { Feature } from "../utils/objects";
 import { getAllFeatures, getAllUsers, postFeature } from "./featuresApi";
 import { User } from "../utils/objects";
+import styles from "../features/Features.module.css";
 
 function Features() {
   const [requestFormData, setRequestFormData] = useState({});
   const [currentFeatures, setCurrentFeatures] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
   const [users, setUsers] = useState([]);
+  const [featureClass, setFeatureClass] = useState(styles.featureHidden);
+  const [featureDescriptionView, setFeatureDescriptionView] = useState(false);
+  const [selectedFeatureId, setSelectedFeatureId] = useState(null);
 
   useEffect(() => {
     console.log("current user: " + currentUser.name);
@@ -19,7 +23,6 @@ function Features() {
     fetchAllFeatures();
     // fetch all users on component mount
     fetchAllUsers();
-
   }, []);
 
   useEffect(() => {
@@ -30,7 +33,6 @@ function Features() {
       setCurrentUser(firstUser);
     }
   }, [users]);
-  
 
   const fetchAllFeatures = async () => {
     const features = await getAllFeatures();
@@ -122,8 +124,7 @@ function Features() {
         `handleVote: User has written the feature, user: ${currentUser.name}, userId: ${currentUser.userId}, No vote`
       );
       return;
-    }
-      else {
+    } else {
       console.log(
         `handleVote: User has not voted, user: ${currentUser.name}, userId: ${currentUser.userId}, vote valid`
       );
@@ -142,9 +143,21 @@ function Features() {
     }
   };
 
+  const handleAboutClick = (id) => {
+    setSelectedFeatureId(id);
+
+    if (featureClass === styles.feature) {
+      setFeatureClass(styles.featureHidden);
+      setFeatureDescriptionView(styles.featureDescriptionHidden)
+    } else {
+      setFeatureClass(styles.feature);
+      setFeatureDescriptionView(styles.featureDescriptionShow)
+    }
+  };
+
   return (
-    <div className="request-container">
-      <div className="current-user-container">
+    <div className={styles.requestContainer}>
+      <div className={styles.currentUser}>
         <select onChange={handleChangeUser}>
           {users.map((user) => (
             <option key={user.userId} value={user.userId}>
@@ -153,10 +166,11 @@ function Features() {
           ))}
         </select>
       </div>
-      <div className="request-form">
+      <div className={styles.requestFormContainer}>
         <h2>Feature Request Form</h2>
         <form onSubmit={handleRequestSubmit}>
           <TextField
+            variant="filled"
             type="text"
             name="name"
             label="name"
@@ -166,6 +180,7 @@ function Features() {
             onChange={handleRequestChange}
           />
           <TextField
+            variant="filled"
             type="text"
             name="description"
             label="description"
@@ -174,38 +189,57 @@ function Features() {
             value={requestFormData.description}
             onChange={handleRequestChange}
           />
-          <button className="styled-button" type="submit">
+          <button className={styles.blueButton} type="submit">
             Submit
           </button>
         </form>
+      </div>
 
-        <div className="features-list">
-          <h2>Current Requests</h2>
-          <ul>
-            {currentFeatures.sort((a, b) => b.id - a.id) // Sort features by id
+      <div className={styles.featuresListContainer}>
+        <ul className={styles.featuresList}>
+          {currentFeatures
+            .sort((a, b) => b.id - a.id) // Sort features by id
             .map((feature) => (
               <li key={feature.id}>
-                <div className="feature-container">
-                  <div className="feature-name">
+                <div
+                  className={
+                    feature.id === selectedFeatureId
+                      ? featureClass
+                      : styles.featureHidden
+                  }
+                >
+                  <div className={styles.featureName}>
                     <h3>{feature.name}</h3>
                   </div>
-                  <div className="feature-userId">
+                  <div className={styles.featureUserId}>
                     <h4>{findUserName(feature.userId)}</h4>
                   </div>
-                  <div className="feature-description">
+                  <div className={feature.id === selectedFeatureId
+                      ? featureDescriptionView
+                      : styles.featureDescriptionHidden}>
                     <h4>{feature.description}</h4>
                   </div>
-                  <div className="feature-votes">
-                    <h4>{feature.votes.length}</h4>
+                  <div className={styles.featureVotes}>
+                    <h4>Votes: {feature.votes.length}</h4>
                   </div>
-                  <div className="feature-vote-button">
-                    <button onClick={() => handleVote(feature.id)}>Vote</button>
+                  <div className={styles.featureButtons}>
+                    <button
+                      className={styles.greenButton}
+                      onClick={() => handleAboutClick(feature.id)}
+                    >
+                      About
+                    </button>
+                    <button
+                      className={styles.greenButton}
+                      onClick={() => handleVote(feature.id)}
+                    >
+                      Vote
+                    </button>
                   </div>
                 </div>
               </li>
             ))}
-          </ul>
-        </div>
+        </ul>
       </div>
     </div>
   );

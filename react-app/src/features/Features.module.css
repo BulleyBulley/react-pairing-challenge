@@ -1,0 +1,176 @@
+.requestContainer {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.requestFormContainer {
+  width: 80%;
+  height: 30vh;
+  background-color: #f3f4f5;
+  display: flex;
+  flex-direction: column;
+}
+
+.featuresListContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.featuresList {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.featuresList li {
+  list-style-type: none;
+}
+
+.requestContainer h2 {
+  margin: 20px;
+  font-weight: 200;
+}
+
+.feature {
+  width: 80vw;
+  height: 40vh;
+  display: grid;
+  grid-template-areas:
+    "a b"
+    "c c"
+    "d e";
+  border-color: #a8abb2;
+  border-style: solid;
+  border-width: 1px;
+  grid-template-rows: 33% 33% 34%;
+  grid-template-columns: 50% 50%;
+
+  box-shadow: 1px 1px 15px 1px #828387;
+  margin: 1vw;
+  border-radius: 5px;
+}
+
+.featureHidden {
+  width: 80vw;
+  height: 10vh;
+  display: grid;
+  grid-template-areas: "a b d e";
+  border-color: #a8abb2;
+  border-style: solid;
+  border-width: 1px;
+  grid-template-rows: 100%;
+  grid-template-columns: 25% 25% 25% 25%;
+
+  box-shadow: 1px 1px 15px 1px #828387;
+  margin: 1vw;
+  border-radius: 5px;
+}
+
+.featureName {
+  grid-area: a;
+  background-color: rgba(229, 231, 233, 0.97);
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.featureUserId {
+  grid-area: b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(244, 245, 246);
+}
+
+.featureDescriptionShow {
+  grid-area: c;
+  background-color: rgba(212, 227, 241, 0.479);
+}
+
+.featureDescriptionHidden {
+  display: none;
+}
+
+.featureVotes {
+  grid-area: d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #dbdde2;
+}
+
+.featureButtons {
+  display: flex;
+  grid-area: e;
+  width: 100%;
+  justify-content: flex-end;
+  align-content: center;
+  background-color: #e4e7ed;
+  color: white;
+  border: none;
+  font-size: 0.8rem;
+}
+
+.featureName h3 {
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.featureUserId h4 {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.featureDescription h4 {
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+.featureVotes h4 {
+  font-size: 1rem;
+  font-weight: 300;
+  color: rgb(4, 4, 3);
+}
+
+.currentUser {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-right: 5vw;
+  margin-top: 1vh;
+}
+
+.blueButton {
+  background-color: #0903a6;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1.1rem;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 10px 24px;
+}
+
+.greenButton {
+  background-color: #00a74a;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 0.8rem;
+  margin: 1vw;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 0.5vw 1vw;
+}

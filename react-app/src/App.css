@@ -1,102 +1,17 @@
-.request-container {
-  width: 100%;
+.App {
+  font-family: "myriad-pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-.request-container h2 {
-  margin: 20px;
-  font-weight: 200;
-}
 
-.feature-container {
-  width: 80%;
-  display: grid;
-  grid-template-areas: 
-            "a b"
-            "c c"
-            "d e";
-            border-color: #a8abb2;
-            border-style: solid;
-            border-width: 1px;
-            grid-template-rows: 20% 20% 20%;
-            grid-template-columns: 50% 50%;
 
-            box-shadow: 1px 1px 15px 1px #828387;
-            margin: 20px;
-            border-radius: 5px;
-}
 
-.features-list li {
-  list-style-type: none;
-}
 
-.feature-name {
-  grid-area: a;
-  background-color: rgba(208, 208, 208, 0.32);
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
 
-.feature-name h3 {
-  font-size: 1.2rem;
-  font-weight: 400;
-}
 
-.feature-userId {
-  grid-area: b;
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-  word-wrap:break-word;
-}
 
-.feature-userId h4 {
-  margin-right: 10px;
-  font-size: 0.7rem;
-}
 
-.feature-description {
-  width: 100%;
-  grid-area: c;
-  background-color: rgba(243, 243, 243, 0.407);
-}
 
-.feature-description h4 {
-  margin-left: 10px;
-  font-size: 0.8rem;
-  font-weight: 400;
-}
 
-.feature-votes {
-  grid-area: d;
-  background-color: #282c34;
-  border-radius: 0px 0px 0px 5px;
-  
-}
 
-.feature-votes h4 {
-  margin-left: 10px;
-  font-size: 1rem;
-  font-weight: 800;
-  color: rgb(223, 179, 5);
-  
-}
 
-.feature-vote-button {
-  display: flex;
-  justify-content: flex-end;
-  background-color: #282c34;
-  color: white;
-  border: none;
-  border-radius: 0px 0px 5px 0px;
-  padding: 5px;
-  font-size: 0.8rem;
-}
-.feature-vote-button button {
 
-  background-color: #069c27;
-  color: white;
-  border: none;
-  font-size: 0.8rem;
-  height: 50%;
-}

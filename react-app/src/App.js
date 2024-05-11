@@ -1,5 +1,5 @@
 import React from 'react';
-import Requests from './features/request/Request.js/Requests.js';
+import Requests from './features/Features.js';
 import './App.css';
 
 function App() {

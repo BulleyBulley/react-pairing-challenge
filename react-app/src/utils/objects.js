@@ -7,3 +7,10 @@ export class Feature {
         this.votes = [];
     }
 }
+
+export class User {
+    constructor(name) {
+        this.name = name;
+        this.userId = "";
+    }
+}

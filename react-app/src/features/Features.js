@@ -8,7 +8,12 @@ import {
 } from "@chakra-ui/react";
 import { Button } from "@chakra-ui/react";
 import { Feature } from "../utils/objects";
-import { getAllFeatures, getAllUsers, postFeature, updateFeature } from "./featuresApi";
+import {
+  getAllFeatures,
+  getAllUsers,
+  postFeature,
+  updateFeature,
+} from "./featuresApi";
 import { User } from "../utils/objects";
 import styles from "../features/Features.module.css";
 import { useSelector, useDispatch } from "react-redux";
@@ -18,13 +23,16 @@ import {
   updateFeatureVote,
 } from "../features/featuresSlice"; // Import your slices
 import { findUserName } from "../utils/functions";
-import { CircularProgress, CircularProgressLabel } from '@chakra-ui/react'
-import  UserContext  from '../utils/userContext';
+import {
+  CircularProgress,
+  useToast,
+} from "@chakra-ui/react";
+import UserContext from "../utils/userContext";
 
 function Features() {
   const dispatch = useDispatch();
   const users = useSelector((state) => state.users);
-  const {currentUser, setCurrentUser} = useContext(UserContext);
+  const { currentUser, setCurrentUser } = useContext(UserContext);
   const currentFeatures = useSelector((state) => state.currentFeatures);
   const [requestFormData, setRequestFormData] = useState({});
   const [featureClass, setFeatureClass] = useState(styles.featureHidden);
@@ -33,6 +41,7 @@ function Features() {
   const [usersLoading, setUsersLoading] = useState(true);
   const [featuresLoading, setFeaturesLoading] = useState(true);
   const [currentUserLoading, setCurrentUserLoading] = useState(true);
+  const toast = useToast();
 
   useEffect(() => {
     // fetch the current features on component mount
@@ -50,14 +59,12 @@ function Features() {
       setCurrentUserLoading(false); // Fix the typo here
     }
   }, [users, currentUser.userId, setCurrentUser]);
-  
 
   useEffect(() => {
     // Set loading to false when users data is available and current features are available
-    if (users.length > 0 ) {
+    if (users.length > 0) {
       setUsersLoading(false);
     }
-
   }, [users]);
 
   useEffect(() => {
@@ -120,6 +127,13 @@ function Features() {
     // add the new request to the currentFeatures array at the start
     dispatch(setCurrentFeatures([newRequest, ...currentFeatures]));
 
+    toast({
+      title: "Feature request submitted",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    })
+
     //clear the form
     setRequestFormData({
       name: "",
@@ -131,54 +145,75 @@ function Features() {
     console.log("handleVote: ", id);
 
     // Find the feature that matches the id
-  const featureIndex = currentFeatures.findIndex((f) => f.id === id);
-  if (featureIndex === -1) {
-    console.error("Feature not found");
-    return;
-  }
+    const featureIndex = currentFeatures.findIndex((f) => f.id === id);
+    if (featureIndex === -1) {
+      console.error("Feature not found");
+      return;
+    }
 
-  const feature = { ...currentFeatures[featureIndex] };
+    const feature = { ...currentFeatures[featureIndex] };
 
     // Check if the user has already voted
     const hasVoted = feature.votes.includes(currentUser.userId);
     const userWroteFeature = feature.userId === currentUser.userId;
 
     if (hasVoted) {
+      // Display a message to the user
+      toast({
+        title: "You have already voted for this feature",
+        status: "warning",
+        duration: 3000,
+        isClosable: true,
+      })
       console.log(
         `handleVote: User has already voted, user: ${currentUser.name}, userId: ${currentUser.userId}, No vote`
       );
       return;
     } else if (userWroteFeature) {
+      toast({
+        title: "You cannot vote for your own feature",
+        status: "warning",
+        duration: 3000,
+        isClosable: true,
+      
+      })
       console.log(
         `handleVote: User has written the feature, user: ${currentUser.name}, userId: ${currentUser.userId}, No vote`
       );
       return;
     } else {
-      console.log(
+      toast({
+        title: "Vote submitted successfully",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      
+      })
+      console.log( 
         `handleVote: User has not voted, user: ${currentUser.name}, userId: ${currentUser.userId}, vote valid`
       );
-      
-  // Create a new feature object with a properly initialized votes array
-  const updatedFeature = {
-    ...feature,
-    votes: feature.votes ? [...feature.votes] : [],
-  };
 
-  // Add the user's id to the votes array
-  updatedFeature.votes.push(currentUser.userId);
+      // Create a new feature object with a properly initialized votes array
+      const updatedFeature = {
+        ...feature,
+        votes: feature.votes ? [...feature.votes] : [],
+      };
 
-  // Update the feature in the currentFeatures array
-  const updatedFeatures = [
-    ...currentFeatures.slice(0, featureIndex),
-    updatedFeature,
-    ...currentFeatures.slice(featureIndex + 1),
-  ];
+      // Add the user's id to the votes array
+      updatedFeature.votes.push(currentUser.userId);
 
-  // Update the state
-  dispatch(setCurrentFeatures(updatedFeatures));
+      // Update the feature in the currentFeatures array
+      const updatedFeatures = [
+        ...currentFeatures.slice(0, featureIndex),
+        updatedFeature,
+        ...currentFeatures.slice(featureIndex + 1),
+      ];
 
-  // Update the feature in the database
-  updateFeature(updatedFeature);
+      // Update the state
+      dispatch(setCurrentFeatures(updatedFeatures));
+
+      // Update the feature in the database
+      updateFeature(updatedFeature);
     }
   };
 
@@ -199,11 +234,10 @@ function Features() {
       {/* Render loading indicator while users data is being fetched */}
       {usersLoading && currentUserLoading ? (
         <div className={styles.preLoad}>
-        <CircularProgress isIndeterminate size='100px' thickness='4px' />
+          <CircularProgress isIndeterminate size="100px" thickness="4px" />
         </div>
       ) : (
         <>
-
           <div className={styles.requestFormContainer}>
             <h2>Feature Request Form</h2>
             <form className={styles.requestForm} onSubmit={handleRequestSubmit}>
@@ -243,13 +277,9 @@ function Features() {
               </div>
 
               <div className={styles.requestFormButtons}>
-                <Button
-                  colorScheme="blue"
-                  className={styles.basicButton}
-                  type="submit"
-                >
+                <button className={styles.submitButton} type="submit">
                   Submit
-                </Button>
+                </button>
               </div>
             </form>
           </div>
@@ -257,64 +287,60 @@ function Features() {
           {/* Render loading indicator while features data is being fetched */}
           {featuresLoading ? (
             <div className={styles.preLoad}>
-        <CircularProgress isIndeterminate />
-        </div>
+              <CircularProgress isIndeterminate />
+            </div>
           ) : (
-
-          <div className={styles.featuresListContainer}>
-            <ul className={styles.featuresList}>
-              {currentFeatures
-              //toSort causing error as mutates the original array
-                .toSorted((a, b) => b.votes.length - a.votes.length) // Sort features by number of votes
-                .map((feature) => (
-                  <li key={feature.id}>
-                    <div
-                      className={
-                        feature.id === selectedFeatureId
-                          ? featureClass
-                          : styles.featureHidden
-                      }
-                    >
-                      <div className={styles.featureName}>
-                        <h3>{feature.name}</h3>
-                      </div>
-                      <div className={styles.featureUserId}>
-                        <h4>{findUserName(feature.userId, users)}</h4>
-                      </div>
+            <div className={styles.featuresListContainer}>
+              <ul className={styles.featuresList}>
+                {currentFeatures
+                  //toSort causing error as mutates the original array
+                  .toSorted((a, b) => b.votes.length - a.votes.length) // Sort features by number of votes
+                  .map((feature) => (
+                    <li key={feature.id}>
                       <div
                         className={
                           feature.id === selectedFeatureId
-                            ? featureDescriptionView
-                            : styles.featureDescriptionHidden
+                            ? featureClass
+                            : styles.featureHidden
                         }
                       >
-                        <h4>{feature.description}</h4>
-                      </div>
-                      <div className={styles.featureVotes}>
-                        <h4>Votes: {feature.votes.length}</h4>
-                      </div>
-                      <div className={styles.featureButtons}>
-                        <Button
-                          colorScheme="teal"
-                          className={styles.featureButton}
-                          onClick={() => handleAboutClick(feature.id)}
+                        <div className={styles.featureName}>
+                          <h3>{feature.name}</h3>
+                        </div>
+                        <div className={styles.featureUserId}>
+                          <h4>{findUserName(feature.userId, users)}</h4>
+                        </div>
+                        <div
+                          className={
+                            feature.id === selectedFeatureId
+                              ? featureDescriptionView
+                              : styles.featureDescriptionHidden
+                          }
                         >
-                          About
-                        </Button>
-                        <Button
-                          colorScheme="yellow"
-                          className={styles.featureButton}
-                          onClick={() => handleVote(feature.id)}
-                        >
-                          Vote
-                        </Button>
+                          <h4>{feature.description}</h4>
+                        </div>
+                        <div className={styles.featureVotes}>
+                          <h4>Votes: {feature.votes.length}</h4>
+                        </div>
+                        <div className={styles.featureButtons}>
+                          <button
+                            className={styles.featureButton1}
+                            onClick={() => handleAboutClick(feature.id)}
+                          >
+                            About
+                          </button>
+                          <button
+                            className={styles.featureButton2}
+                            onClick={() => handleVote(feature.id)}
+                          >
+                            Vote
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  </li>
-                ))}
-            </ul>
-          </div>
-          
+                    </li>
+                  ))}
+              </ul>
+            </div>
           )}
         </>
       )}

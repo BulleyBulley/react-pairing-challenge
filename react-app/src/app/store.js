@@ -10,7 +10,6 @@ const initialState = {
 
 const rootReducer = combineReducers({
   users: usersReducer,
-  currentUser: currentUserReducer,
   currentFeatures: currentFeaturesReducer,
 });
 

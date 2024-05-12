@@ -6,7 +6,6 @@ import {
   Textarea,
   Select,
 } from "@chakra-ui/react";
-import { Button } from "@chakra-ui/react";
 import { Feature } from "../utils/objects";
 import {
   getAllFeatures,

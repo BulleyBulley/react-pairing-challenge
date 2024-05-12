@@ -1,3 +1,5 @@
+/* containers */
+
 .requestContainer {
   width: 100vw;
   height: 92vh;
@@ -10,6 +12,11 @@
   overflow-y: auto;
   
 }
+
+.requestContainer h2 {
+    margin: 20px;
+    font-weight: 200;
+  }
 
 .requestContainer textarea {
     resize: none;
@@ -28,6 +35,11 @@
   
 }
 
+.requestFormContainer h2 {
+    font-size: 2rem;
+    color: white;
+  }
+
 .featuresListContainer {
     display: flex;
     flex-direction: column;
@@ -36,6 +48,8 @@
     transition: opacity 0.5s ease-in-out;
     
   }
+
+  /*  */
 
 .requestForm {
   display: flex;
@@ -52,21 +66,9 @@
   justify-content: center;
 }
 
-.requestFormContainer h2 {
-  font-size: 2rem;
-  color: white;
-}
-
-.nameEntryField {
-  
-  
-}
-
 .descriptionEntryField {
   margin-top: 1vh;
 }
-
-
 
 .featuresList {
   display: flex;
@@ -76,16 +78,9 @@
   padding: 0;
 }
 
-
-
 .featuresList li {
   list-style-type: none;
 
-}
-
-.requestContainer h2 {
-  margin: 20px;
-  font-weight: 200;
 }
 
 .feature {
@@ -132,6 +127,17 @@
   border-width: 1px;
 }
 
+.featureName h3 {
+    font-size: 1em;
+    font-weight: 500;
+    color: white;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+  }
+
 .featureUserId {
   grid-area: b;
   display: flex;
@@ -141,12 +147,24 @@
   border-width: 1px;
 }
 
+.featureUserId h4 {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #9099b7
+  }
+
 .featureDescriptionShow {
   grid-area: c;
   background-color: #6a7297;
   border-width: 2px;
   border-color: #9099b7;
 }
+
+.featureDescriptionShow h4 {
+    font-size: 1rem;
+    font-weight: 400;
+    color:white;
+  }
 
 .featureDescriptionHidden {
   display: none;
@@ -161,6 +179,12 @@
   border-width: 1px;
   border-color: #9099b7;
 }
+
+.featureVotes h4 {
+    font-size: 1rem;
+    font-weight: 300;
+    color: rgb(4, 4, 3);
+  }
 
 .featureButtons {
   grid-area: e;
@@ -189,34 +213,7 @@
     margin-top: 1vh;
 }
 
-.featureName h3 {
-  font-size: 1em;
-  font-weight: 500;
-  color: white;
-  text-transform: uppercase;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  word-wrap: break-word;
-}
-
-.featureUserId h4 {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #9099b7
-}
-
-.featureDescriptionShow h4 {
-  font-size: 1rem;
-  font-weight: 400;
-  color:white;
-}
-
-.featureVotes h4 {
-  font-size: 1rem;
-  font-weight: 300;
-  color: rgb(4, 4, 3);
-}
+/* buttons */
 
 .submitButton {
     display: flex;
@@ -377,18 +374,8 @@
     }
   }
 
-  .voteMessage{
-    display: flex;
-    justify-content: center;
-    grid-area: "message";
- 
-  }
 
-  .voteMessage h4 {
-    font-size: 0.8rem;
-    font-weight: 300;
-    color: black;
-  }
+/* preload */
 
 .preLoad {
     display: flex;

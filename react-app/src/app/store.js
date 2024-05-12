@@ -1,8 +1,19 @@
 import { configureStore } from '@reduxjs/toolkit';
-import counterReducer from '../features/counter/counterSlice';
+import { combineReducers } from 'redux';
+import { usersReducer, currentUserReducer, currentFeaturesReducer } from '../features/featuresSlice';
+
+const initialState = {
+  users: [],
+  currentUser: {},
+  currentFeatures: [],
+}
+
+const rootReducer = combineReducers({
+  users: usersReducer,
+  currentUser: currentUserReducer,
+  currentFeatures: currentFeaturesReducer,
+});
 
 export const store = configureStore({
-  reducer: {
-    counter: counterReducer,
-  },
+  reducer: rootReducer,
 });

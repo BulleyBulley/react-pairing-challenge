@@ -1,22 +1,39 @@
 import React, { useState, useEffect } from "react";
-import { Input, InputGroup, InputLeftAddon, InputRightAddon, Textarea, FormControl, FormLabel, Select } from '@chakra-ui/react'
-import { Button } from "@chakra-ui/react"
+import {
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  Textarea,
+  Select,
+} from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 import { Feature } from "../utils/objects";
 import { getAllFeatures, getAllUsers, postFeature } from "./featuresApi";
 import { User } from "../utils/objects";
 import styles from "../features/Features.module.css";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setUsers,
+  setCurrentUser,
+  setCurrentFeatures,
+  updateFeatureVote,
+} from "../features/featuresSlice"; // Import your slices
 
 function Features() {
+  const dispatch = useDispatch();
+  const users = useSelector((state) => state.users);
+  const currentUser = useSelector((state) => state.currentUser);
+  const currentFeatures = useSelector((state) => state.currentFeatures);
   const [requestFormData, setRequestFormData] = useState({});
-  const [currentFeatures, setCurrentFeatures] = useState([]);
-  const [currentUser, setCurrentUser] = useState({});
-  const [users, setUsers] = useState([]);
   const [featureClass, setFeatureClass] = useState(styles.featureHidden);
   const [featureDescriptionView, setFeatureDescriptionView] = useState(false);
   const [selectedFeatureId, setSelectedFeatureId] = useState(null);
+  const [usersLoading, setUsersLoading] = useState(true);
+  const [featuresLoading, setFeaturesLoading] = useState(true);
 
   useEffect(() => {
     console.log("current user: " + currentUser.name);
+    console.log("users: " + users);
   }, [currentUser]);
 
   useEffect(() => {
@@ -28,24 +45,41 @@ function Features() {
 
   useEffect(() => {
     // Wait for fetch all users on component mount
-    if (users.length > 0 && !currentUser.userId) {
+    if (users && users.length > 0 && !currentUser.userId) {
       const firstUser = new User(users[0].name);
       firstUser.userId = users[0].userId;
-      setCurrentUser(firstUser);
+      dispatch(setCurrentUser(firstUser));
     }
+  }, [users, dispatch, currentUser.userId]);
+
+  useEffect(() => {
+    // Set loading to false when users data is available and current features are available
+    if (users.length > 0 ) {
+      setUsersLoading(false);
+    }
+
   }, [users]);
+
+  useEffect(() => {
+    // Set loading to false when users data is available and current features are available
+    if (currentFeatures.length > 0) {
+      setFeaturesLoading(false);
+    }
+  }, [currentFeatures]);
 
   const fetchAllFeatures = async () => {
     const features = await getAllFeatures();
     if (features.status === 200) {
-      setCurrentFeatures(features.data);
+      console.log("fetchAllFeatures: ", features.data);
+      dispatch(setCurrentFeatures(features.data));
     }
   };
 
   const fetchAllUsers = async () => {
     const users = await getAllUsers();
     if (users.status === 200) {
-      setUsers(users.data);
+      //console.log("fetchAllUsers: ", users.data);
+      dispatch(setUsers(users.data));
     }
   };
 
@@ -101,7 +135,7 @@ function Features() {
     newRequest.id = newRequestId;
     // update the currentFeatures state
     // add the new request to the currentFeatures array at the start
-    setCurrentFeatures([newRequest, ...currentFeatures]);
+    dispatch(setCurrentFeatures([newRequest, ...currentFeatures]));
 
     //clear the form
     setRequestFormData({
@@ -145,7 +179,7 @@ function Features() {
       );
 
       // Update the state
-      setCurrentFeatures(updatedFeatures);
+      dispatch(setCurrentFeatures(updatedFeatures));
     }
   };
 
@@ -154,123 +188,147 @@ function Features() {
 
     if (featureClass === styles.feature) {
       setFeatureClass(styles.featureHidden);
-      setFeatureDescriptionView(styles.featureDescriptionHidden)
+      setFeatureDescriptionView(styles.featureDescriptionHidden);
     } else {
       setFeatureClass(styles.feature);
-      setFeatureDescriptionView(styles.featureDescriptionShow)
+      setFeatureDescriptionView(styles.featureDescriptionShow);
     }
   };
 
   return (
     <div className={styles.requestContainer}>
-      <div className={styles.currentUser}>
-        <Select onChange={handleChangeUser}
-        variant='filled' 
-        placeholder='select user'
-        display="flex"
-        justifyContent='flex-end' >
-          {users.map((user) => (
-            <option key={user.userId} value={user.userId}>
-              {user.name}
-            </option>
-          ))}
-        </Select>
-      </div>
-      <div className={styles.requestFormContainer}>
-        <h2>Feature Request Form</h2>
-        <form className={styles.requestForm} onSubmit={handleRequestSubmit}>
-        <div className={styles.requestFormFields}>
-        <InputGroup>
-        <InputLeftAddon
-        
-        >Name</InputLeftAddon>
-        <Input className={styles.nameEntryField}
-         placeholder="name" 
-          type="text"
-          name="name"
-          color='white'
-          required='true'
-          variant='outline'
-          data-testid="name-entry-field"
-          autoComplete="off"
-          value={requestFormData.name}
-          onChange={handleRequestChange}
-        />
-        </InputGroup>
-        <InputGroup className={styles.descriptionEntryField}>
-        <InputLeftAddon>Description</InputLeftAddon>
-         
-          <Textarea
-            placeholder="description "
-            type="text"
-            name="description"
-            required='true'
-            size="lg"
-            color='white'
-            data-testid="description-entry-field"
-            autoComplete="off"
-            value={requestFormData.description}
-            onChange={handleRequestChange}
-            
-          />
-          </InputGroup>
+      {/* Render loading indicator while users data is being fetched */}
+      {usersLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <>
+          <div className={styles.currentUser}>
+            <Select
+              onChange={handleChangeUser}
+              variant="filled"
+              placeholder="select user"
+              display="flex"
+              justifyContent="flex-end"
+            >
+              {users.map((user) => (
+                <option key={user.userId} value={user.userId}>
+                  {user.name}
+                </option>
+              ))}
+            </Select>
           </div>
+          <div className={styles.requestFormContainer}>
+            <h2>Feature Request Form</h2>
+            <form className={styles.requestForm} onSubmit={handleRequestSubmit}>
+              <div className={styles.requestFormFields}>
+                <InputGroup>
+                  <InputLeftAddon>Name</InputLeftAddon>
+                  <Input
+                    className={styles.nameEntryField}
+                    placeholder="name"
+                    type="text"
+                    name="name"
+                    color="white"
+                    required="true"
+                    variant="outline"
+                    data-testid="name-entry-field"
+                    autoComplete="off"
+                    value={requestFormData.name}
+                    onChange={handleRequestChange}
+                  />
+                </InputGroup>
+                <InputGroup className={styles.descriptionEntryField}>
+                  <InputLeftAddon>Description</InputLeftAddon>
 
-          <div className={styles.requestFormButtons}>
-          <Button colorScheme="blue" className={styles.basicButton} type="submit">
-            Submit
-          </Button>
-          </div>
-        </form>
-      </div>
+                  <Textarea
+                    placeholder="description "
+                    type="text"
+                    name="description"
+                    required="true"
+                    size="lg"
+                    color="white"
+                    data-testid="description-entry-field"
+                    autoComplete="off"
+                    value={requestFormData.description}
+                    onChange={handleRequestChange}
+                  />
+                </InputGroup>
+              </div>
 
-      <div className={styles.featuresListContainer}>
-        <ul className={styles.featuresList}>
-          {currentFeatures
-            .sort((a, b) => b.id - a.id) // Sort features by id
-            .map((feature) => (
-              <li key={feature.id}>
-                <div
-                  className={
-                    feature.id === selectedFeatureId
-                      ? featureClass
-                      : styles.featureHidden
-                  }
+              <div className={styles.requestFormButtons}>
+                <Button
+                  colorScheme="blue"
+                  className={styles.basicButton}
+                  type="submit"
                 >
-                  <div className={styles.featureName}>
-                    <h3>{feature.name}</h3>
-                  </div>
-                  <div className={styles.featureUserId}>
-                    <h4>{findUserName(feature.userId)}</h4>
-                  </div>
-                  <div className={feature.id === selectedFeatureId
-                      ? featureDescriptionView
-                      : styles.featureDescriptionHidden}>
-                    <h4>{feature.description}</h4>
-                  </div>
-                  <div className={styles.featureVotes}>
-                    <h4>Votes: {feature.votes.length}</h4>
-                  </div>
-                  <div className={styles.featureButtons}>
-                    <Button
-                      colorScheme="teal" className={styles.featureButton}
-                      onClick={() => handleAboutClick(feature.id)}
+                  Submit
+                </Button>
+              </div>
+            </form>
+          </div>
+
+          {/* Render loading indicator while features data is being fetched */}
+          {featuresLoading ? (
+            <div>Loading...</div>
+          ) : (
+
+          <div className={styles.featuresListContainer}>
+            <ul className={styles.featuresList}>
+              {currentFeatures
+              //toSort causing error as mutates the original array
+                .toSorted((a, b) => b.id - a.id) // Sort features by id
+                .map((feature) => (
+                  <li key={feature.id}>
+                    <div
+                      className={
+                        feature.id === selectedFeatureId
+                          ? featureClass
+                          : styles.featureHidden
+                      }
                     >
-                      About
-                    </Button>
-                    <Button
-                      colorScheme="yellow" className={styles.featureButton}
-                      onClick={() => handleVote(feature.id)}
-                      
-                    >
-                      Vote
-                    </Button>
-                  </div>
-                </div>
-              </li>
-            ))}
-        </ul>
-      </div>
+                      <div className={styles.featureName}>
+                        <h3>{feature.name}</h3>
+                      </div>
+                      <div className={styles.featureUserId}>
+                        <h4>{findUserName(feature.userId)}</h4>
+                      </div>
+                      <div
+                        className={
+                          feature.id === selectedFeatureId
+                            ? featureDescriptionView
+                            : styles.featureDescriptionHidden
+                        }
+                      >
+                        <h4>{feature.description}</h4>
+                      </div>
+                      <div className={styles.featureVotes}>
+                        <h4>Votes: {feature.votes.length}</h4>
+                      </div>
+                      <div className={styles.featureButtons}>
+                        <Button
+                          colorScheme="teal"
+                          className={styles.featureButton}
+                          onClick={() => handleAboutClick(feature.id)}
+                        >
+                          About
+                        </Button>
+                        <Button
+                          colorScheme="yellow"
+                          className={styles.featureButton}
+                          onClick={() => handleVote(feature.id)}
+                        >
+                          Vote
+                        </Button>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+            </ul>
+          </div>
+          
+          )}
+        </>
+      )}
     </div>
   );
 }

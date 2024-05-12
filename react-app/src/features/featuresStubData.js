@@ -5,19 +5,19 @@ export const stubUsers = {
   status: 200,
   data: [
     {
-      name: "Rod",
+      name: "John",
       userId: "1",
     },
     {
-      name: "Jane",
+      name: "Paul",
       userId: "2",
     },
     {
-      name: "Freddy",
+      name: "George",
       userId: "3",
     },
     {
-        name: "Bungle",
+        name: "Ringo",
         userId: "4",
     }
   ],

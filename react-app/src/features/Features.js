@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Input,
   InputGroup,
@@ -8,23 +8,23 @@ import {
 } from "@chakra-ui/react";
 import { Button } from "@chakra-ui/react";
 import { Feature } from "../utils/objects";
-import { getAllFeatures, getAllUsers, postFeature } from "./featuresApi";
+import { getAllFeatures, getAllUsers, postFeature, updateFeature } from "./featuresApi";
 import { User } from "../utils/objects";
 import styles from "../features/Features.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setUsers,
-  setCurrentUser,
   setCurrentFeatures,
   updateFeatureVote,
 } from "../features/featuresSlice"; // Import your slices
 import { findUserName } from "../utils/functions";
 import { CircularProgress, CircularProgressLabel } from '@chakra-ui/react'
+import  UserContext  from '../utils/userContext';
 
 function Features() {
   const dispatch = useDispatch();
   const users = useSelector((state) => state.users);
-  const currentUser = useSelector((state) => state.currentUser);
+  const {currentUser, setCurrentUser} = useContext(UserContext);
   const currentFeatures = useSelector((state) => state.currentFeatures);
   const [requestFormData, setRequestFormData] = useState({});
   const [featureClass, setFeatureClass] = useState(styles.featureHidden);
@@ -32,10 +32,7 @@ function Features() {
   const [selectedFeatureId, setSelectedFeatureId] = useState(null);
   const [usersLoading, setUsersLoading] = useState(true);
   const [featuresLoading, setFeaturesLoading] = useState(true);
-
-  useEffect(() => {
-    console.log("current user: " + currentUser.name);
-  }, [currentUser]);
+  const [currentUserLoading, setCurrentUserLoading] = useState(true);
 
   useEffect(() => {
     // fetch the current features on component mount
@@ -49,9 +46,11 @@ function Features() {
     if (users && users.length > 0 && !currentUser.userId) {
       const firstUser = new User(users[0].name);
       firstUser.userId = users[0].userId;
-      dispatch(setCurrentUser(firstUser));
+      setCurrentUser(firstUser);
+      setCurrentUserLoading(false); // Fix the typo here
     }
-  }, [users, dispatch, currentUser.userId]);
+  }, [users, currentUser.userId, setCurrentUser]);
+  
 
   useEffect(() => {
     // Set loading to false when users data is available and current features are available
@@ -79,7 +78,6 @@ function Features() {
   const fetchAllUsers = async () => {
     const users = await getAllUsers();
     if (users.status === 200) {
-      //console.log("fetchAllUsers: ", users.data);
       dispatch(setUsers(users.data));
     }
   };
@@ -178,6 +176,9 @@ function Features() {
 
   // Update the state
   dispatch(setCurrentFeatures(updatedFeatures));
+
+  // Update the feature in the database
+  updateFeature(updatedFeature);
     }
   };
 
@@ -196,7 +197,7 @@ function Features() {
   return (
     <div className={styles.requestContainer}>
       {/* Render loading indicator while users data is being fetched */}
-      {usersLoading ? (
+      {usersLoading && currentUserLoading ? (
         <div className={styles.preLoad}>
         <CircularProgress isIndeterminate size='100px' thickness='4px' />
         </div>

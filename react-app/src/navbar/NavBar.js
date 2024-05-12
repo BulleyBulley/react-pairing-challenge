@@ -1,20 +1,19 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import logo from './header-logo-midas.svg';
 import styles from  '../navbar/Navbar.module.css';
 import { Select } from '@chakra-ui/react';
 import {findUserName } from '../utils/functions';
 import { User } from '../utils/objects';    
-import {
-    setCurrentUser,
-  } from "../features/featuresSlice"; // Import your slices
   import { useSelector, useDispatch } from "react-redux";
+  import  UserContext  from '../utils/userContext';
 
 
 
 function NavBar() {
-    const dispatch = useDispatch();
-    const currentUser = useSelector((state) => state.currentUser);
     const users = useSelector((state) => state.users);
+    const {currentUser, setCurrentUser} = useContext(UserContext);
+
+
 
     const handleChangeUser = (e) => {
         //console.log the event target value object
@@ -24,7 +23,7 @@ function NavBar() {
         const thisUser = new User(selectedUserName);
         thisUser.userId = selectedUserId;
         // Do something with the selected user, such as updating state
-        dispatch(setCurrentUser(thisUser));
+        setCurrentUser(thisUser);
       };
   return (
     <div className={styles.NavBar}>

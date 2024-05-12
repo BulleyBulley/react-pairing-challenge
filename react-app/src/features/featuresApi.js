@@ -28,6 +28,12 @@ export const postFeature = async (feature) => {
     idIncrementer++;
     return { status: 201, id: idIncrementer };
     
-    
-    
 }
+
+export const updateFeature = async (feature) => {
+    // Simulate a delay to mimic the network request
+    await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulated delay of 1 second (1000 milliseconds)
+    console.log("Feature updated", feature);
+    return { status: 200 };
+    
+} 

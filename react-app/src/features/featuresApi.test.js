@@ -59,16 +59,20 @@ describe('getAllUsers returns with status 200', () => {
         const response = await getAllUsers();
         expect(response.data).toEqual([
             {
-                name: "Rod",
+                name: "John",
                 userId: "1",
             },
             {
-                name: "Jane",
+                name: "Paul",
                 userId: "2",
             },
             {
-                name: "Freddy",
+                name: "George",
                 userId: "3",
+            },
+            {
+                name: "Ringo",
+                userId: "4",
             },
         ]);
     });

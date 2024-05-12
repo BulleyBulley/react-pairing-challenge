@@ -6,17 +6,20 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ChakraProvider } from "@chakra-ui/react";
 import './index.css';
+import {UserProvider} from './utils/userContext';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
 
 root.render(
   <React.StrictMode>
+  <UserProvider>
   <ChakraProvider>
     <Provider store={store}>
       <App />
     </Provider>
     </ChakraProvider>
+  </UserProvider>
   </React.StrictMode>
 );
 

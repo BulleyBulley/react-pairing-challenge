@@ -18,6 +18,7 @@ import {
   setCurrentFeatures,
   updateFeatureVote,
 } from "../features/featuresSlice"; // Import your slices
+import { findUserName } from "../utils/functions";
 
 function Features() {
   const dispatch = useDispatch();
@@ -102,22 +103,6 @@ function Features() {
       ...requestFormData,
       [e.target.name]: e.target.value,
     });
-  };
-
-  const handleChangeUser = (e) => {
-    //console.log the event target value object
-    const selectedUserId = e.target.value;
-    // Find the user object based on the selectedUserId
-    const selectedUserName = findUserName(selectedUserId);
-    const thisUser = new User(selectedUserName);
-    thisUser.userId = selectedUserId;
-    // Do something with the selected user, such as updating state
-    dispatch(setCurrentUser(thisUser));
-  };
-
-  const findUserName = (userId) => {
-    const user = users.find((user) => user.userId === userId);
-    return user.name;
   };
 
   const handleRequestSubmit = (e) => {
@@ -214,21 +199,7 @@ function Features() {
         <div>Loading...</div>
       ) : (
         <>
-          <div className={styles.currentUser}>
-            <Select
-              onChange={handleChangeUser}
-              variant="filled"
-              placeholder="select user"
-              display="flex"
-              justifyContent="flex-end"
-            >
-              {users.map((user) => (
-                <option key={user.userId} value={user.userId}>
-                  {user.name}
-                </option>
-              ))}
-            </Select>
-          </div>
+
           <div className={styles.requestFormContainer}>
             <h2>Feature Request Form</h2>
             <form className={styles.requestForm} onSubmit={handleRequestSubmit}>
@@ -302,7 +273,7 @@ function Features() {
                         <h3>{feature.name}</h3>
                       </div>
                       <div className={styles.featureUserId}>
-                        <h4>{findUserName(feature.userId)}</h4>
+                        <h4>{findUserName(feature.userId, users)}</h4>
                       </div>
                       <div
                         className={

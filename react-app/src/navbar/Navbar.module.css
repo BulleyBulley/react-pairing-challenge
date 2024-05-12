@@ -1,10 +1,30 @@
 .NavBar {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding: 0 20px;
+  background: #394264;
+  color: white;
+  font-size: 1.2rem;
+  height: 8vh;
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20%;
+}
+
+.currentUser{
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-    background: #394264;
-    color: white;
-    font-size: 1.2rem;
-    height: 8vh;
+    
+    
+    width: 100%;
+    text-align: end;
+}
+
+.currentUser select {
+  width: 10vw;
+  height: 3vh;
 }

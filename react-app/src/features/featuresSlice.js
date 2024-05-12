@@ -26,7 +26,6 @@ const currentFeaturesSlice = createSlice({
   initialState: [],
   reducers: {
     setCurrentFeatures: (state, action) => {
-        console.log("setCurrentFeatures: ", action.payload)
       return action.payload;
     },
     updateFeatureVote: (state, action) => {

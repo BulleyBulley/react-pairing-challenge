@@ -33,7 +33,6 @@ function Features() {
 
   useEffect(() => {
     console.log("current user: " + currentUser.name);
-    console.log("users: " + users);
   }, [currentUser]);
 
   useEffect(() => {
@@ -113,7 +112,7 @@ function Features() {
     const thisUser = new User(selectedUserName);
     thisUser.userId = selectedUserId;
     // Do something with the selected user, such as updating state
-    setCurrentUser(thisUser);
+    dispatch(setCurrentUser(thisUser));
   };
 
   const findUserName = (userId) => {
@@ -148,7 +147,13 @@ function Features() {
     console.log("handleVote: ", id);
 
     // Find the feature that matches the id
-    const feature = currentFeatures.find((feature) => feature.id === id);
+  const featureIndex = currentFeatures.findIndex((f) => f.id === id);
+  if (featureIndex === -1) {
+    console.error("Feature not found");
+    return;
+  }
+
+  const feature = { ...currentFeatures[featureIndex] };
 
     // Check if the user has already voted
     const hasVoted = feature.votes.includes(currentUser.userId);
@@ -168,18 +173,25 @@ function Features() {
       console.log(
         `handleVote: User has not voted, user: ${currentUser.name}, userId: ${currentUser.userId}, vote valid`
       );
-      // Add the user's id to the votes array
-      feature.votes.push(currentUser.userId);
+      
+  // Create a new feature object with a properly initialized votes array
+  const updatedFeature = {
+    ...feature,
+    votes: feature.votes ? [...feature.votes] : [],
+  };
 
-      // Update the feature in the currentFeatures array
-      const updatedFeatures = currentFeatures.map(
-        (f) => (f.id === id ? feature : f)
+  // Add the user's id to the votes array
+  updatedFeature.votes.push(currentUser.userId);
 
-        //we would send to update api here as well
-      );
+  // Update the feature in the currentFeatures array
+  const updatedFeatures = [
+    ...currentFeatures.slice(0, featureIndex),
+    updatedFeature,
+    ...currentFeatures.slice(featureIndex + 1),
+  ];
 
-      // Update the state
-      dispatch(setCurrentFeatures(updatedFeatures));
+  // Update the state
+  dispatch(setCurrentFeatures(updatedFeatures));
     }
   };
 
@@ -229,7 +241,7 @@ function Features() {
                     type="text"
                     name="name"
                     color="white"
-                    required="true"
+                    required={true}
                     variant="outline"
                     data-testid="name-entry-field"
                     autoComplete="off"
@@ -244,7 +256,7 @@ function Features() {
                     placeholder="description "
                     type="text"
                     name="description"
-                    required="true"
+                    required={true}
                     size="lg"
                     color="white"
                     data-testid="description-entry-field"

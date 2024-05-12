@@ -52,7 +52,7 @@ function Features() {
       const firstUser = new User(users[0].name);
       firstUser.userId = users[0].userId;
       setCurrentUser(firstUser);
-      setCurrentUserLoading(false); // Fix the typo here
+      setCurrentUserLoading(false); 
     }
   }, [users, currentUser.userId, setCurrentUser]);
 
@@ -73,7 +73,6 @@ function Features() {
   const fetchAllFeatures = async () => {
     const features = await getAllFeatures();
     if (features.status === 200) {
-      console.log("fetchAllFeatures: ", features.data);
       dispatch(setCurrentFeatures(features.data));
     }
   };
@@ -138,7 +137,6 @@ function Features() {
   };
 
   const handleVote = (id) => {
-    console.log("handleVote: ", id);
 
     // Find the feature that matches the id
     const featureIndex = currentFeatures.findIndex((f) => f.id === id);
@@ -211,16 +209,11 @@ function Features() {
     }
   };
 
+  //pressing about button will show the description of the feature or hide it
   const handleAboutClick = (id) => {
     setSelectedFeatureId(id);
-
-    if (featureClass === styles.feature) {
-      setFeatureClass(styles.featureHidden);
-      setFeatureDescriptionView(styles.featureDescriptionHidden);
-    } else {
-      setFeatureClass(styles.feature);
-      setFeatureDescriptionView(styles.featureDescriptionShow);
-    }
+    setFeatureClass(featureClass === styles.feature ? styles.featureHidden : styles.feature);
+    setFeatureDescriptionView(featureClass === styles.feature ? styles.featureDescriptionHidden : styles.featureDescriptionShow);
   };
 
   return (
@@ -297,7 +290,7 @@ function Features() {
                             ? featureClass
                             : styles.featureHidden
                         } animate__animated animate__fadeIn`}
-                        style={{ animationDelay: `${index * 0.1}s` }} // Delay each by 0.2s
+                        style={{ animationDelay: `${index * 0.1}s` }} // Delay each by 0.1s
                       >
                         <div className={styles.featureName}>
                           <h3>{feature.name}</h3>

@@ -1,10 +1,11 @@
 .requestContainer {
   width: 100vw;
-  height: 100vh;
+  height: 92vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  background: #1f253d;
 }
 
 .requestContainer textarea {
@@ -14,19 +15,21 @@
 .requestFormContainer {
   width: 80%;
   height: 40vh;
-  background-color: #f3f4f5;
+  background: #394264;
   display: flex;
   flex-direction: column;
   align-items: center;
   border-radius: 5px;
   border-width: 1px;
+  
 }
 
 .featuresListContainer {
     display: flex;
     flex-direction: column;
     width: 100%;
-
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
   }
 
 .requestForm {
@@ -46,6 +49,7 @@
 
 .requestFormContainer h2 {
   font-size: 2rem;
+  color: white;
 }
 
 .nameEntryField {
@@ -54,7 +58,7 @@
 }
 
 .descriptionEntryField {
-  
+  margin-top: 1vh;
 }
 
 
@@ -79,6 +83,7 @@
 
 .featuresList li {
   list-style-type: none;
+
 }
 
 .requestContainer h2 {
@@ -99,7 +104,7 @@
   border-width: 1px;
   grid-template-rows: 33% 33% 34%;
   grid-template-columns: 50% 50%;
-
+  background-color: #1f253d;
   box-shadow: 1px 1px 15px 1px #828387;
   margin: 1vw;
   border-radius: 5px;
@@ -116,14 +121,14 @@
   grid-template-rows: 100%;
   grid-template-columns: 25% 25% 25% 25%;
 
-  box-shadow: 1px 1px 15px 1px #828387;
+  box-shadow: 1px 1px 10px 1px #828387;
   margin: 1vw;
   border-radius: 5px;
 }
 
 .featureName {
   grid-area: a;
-  background-color: rgba(229, 231, 233, 0.97);
+  background: #394264;
   align-items: center;
   display: flex;
   justify-content: center;
@@ -135,14 +140,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgb(244, 245, 246);
+  background: #434655;
   border-width: 1px;
 }
 
 .featureDescriptionShow {
   grid-area: c;
-  background-color: rgba(204, 224, 243, 0.272);
+  background-color: #a2a9d1;
   border-width: 1px;
+  border-color: #9099b7;
 }
 
 .featureDescriptionHidden {
@@ -154,8 +160,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #dbdde2;
+  background-color: #f1f1e6;
   border-width: 1px;
+  border-color: #9099b7;
 }
 
 .featureButtons {
@@ -166,7 +173,7 @@
   align-items: center;
   background-color: #e4e7ed;
   color: white;
-  
+  border-color: #9099b7;
   font-size: 0.8rem;
   border-width: 1px;
   
@@ -179,16 +186,19 @@
 .featureName h3 {
   font-size: 1rem;
   font-weight: 400;
+  color: white;
 }
 
 .featureUserId h4 {
   font-size: 1rem;
   font-weight: 500;
+  color: #9099b7
 }
 
-.featureDescription h4 {
-  font-size: 0.8rem;
+.featureDescriptionShow h4 {
+  font-size: 1rem;
   font-weight: 400;
+  color:white;
 }
 
 .featureVotes h4 {

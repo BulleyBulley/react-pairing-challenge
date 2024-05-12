@@ -181,28 +181,33 @@ function Features() {
         <form className={styles.requestForm} onSubmit={handleRequestSubmit}>
         <div className={styles.requestFormFields}>
         <InputGroup>
-        <InputLeftAddon>Name</InputLeftAddon>
+        <InputLeftAddon
+        
+        >Name</InputLeftAddon>
         <Input className={styles.nameEntryField}
          placeholder="name" 
           type="text"
           name="name"
+          color='white'
           required='true'
+          variant='outline'
           data-testid="name-entry-field"
           autoComplete="off"
           value={requestFormData.name}
           onChange={handleRequestChange}
         />
         </InputGroup>
-        <InputGroup>
+        <InputGroup className={styles.descriptionEntryField}>
         <InputLeftAddon>Description</InputLeftAddon>
          
           <Textarea
-            className={styles.descriptionEntryField}
+            
             placeholder="description "
             type="text"
             name="description"
             required='true'
             size="lg"
+            color='white'
             data-testid="description-entry-field"
             autoComplete="off"
             value={requestFormData.description}

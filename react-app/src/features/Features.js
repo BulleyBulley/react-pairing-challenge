@@ -22,10 +22,7 @@ import {
   updateFeatureVote,
 } from "../features/featuresSlice"; // Import your slices
 import { findUserName } from "../utils/functions";
-import {
-  CircularProgress,
-  useToast,
-} from "@chakra-ui/react";
+import { CircularProgress, useToast } from "@chakra-ui/react";
 import UserContext from "../utils/userContext";
 
 function Features() {
@@ -131,7 +128,7 @@ function Features() {
       status: "success",
       duration: 3000,
       isClosable: true,
-    })
+    });
 
     //clear the form
     setRequestFormData({
@@ -163,7 +160,7 @@ function Features() {
         status: "warning",
         duration: 3000,
         isClosable: true,
-      })
+      });
       console.log(
         `handleVote: User has already voted, user: ${currentUser.name}, userId: ${currentUser.userId}, No vote`
       );
@@ -174,8 +171,7 @@ function Features() {
         status: "warning",
         duration: 3000,
         isClosable: true,
-      
-      })
+      });
       console.log(
         `handleVote: User has written the feature, user: ${currentUser.name}, userId: ${currentUser.userId}, No vote`
       );
@@ -186,9 +182,8 @@ function Features() {
         status: "success",
         duration: 3000,
         isClosable: true,
-      
-      })
-      console.log( 
+      });
+      console.log(
         `handleVote: User has not voted, user: ${currentUser.name}, userId: ${currentUser.userId}, vote valid`
       );
 
@@ -294,14 +289,15 @@ function Features() {
                 {currentFeatures
                   //toSort causing error as mutates the original array
                   .toSorted((a, b) => b.votes.length - a.votes.length) // Sort features by number of votes
-                  .map((feature) => (
+                  .map((feature,index) => (
                     <li key={feature.id}>
                       <div
-                        className={
+                        className={`${
                           feature.id === selectedFeatureId
                             ? featureClass
                             : styles.featureHidden
-                        }
+                        } animate__animated animate__fadeIn`}
+                        style={{ animationDelay: `${index * 0.1}s` }} // Delay each by 0.2s
                       >
                         <div className={styles.featureName}>
                           <h3>{feature.name}</h3>

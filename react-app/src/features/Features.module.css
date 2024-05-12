@@ -8,6 +8,7 @@
   justify-content: flex-start;
   background: #1f253d;
   overflow-y: auto;
+  
 }
 
 .requestContainer textarea {
@@ -204,10 +205,15 @@
   color: rgb(4, 4, 3);
 }
 
-.basicButton{
-  
-}
 
 .featureButton{
   margin: 1vw;
+}
+
+.preLoad {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
 }

@@ -19,6 +19,7 @@ import {
   updateFeatureVote,
 } from "../features/featuresSlice"; // Import your slices
 import { findUserName } from "../utils/functions";
+import { CircularProgress, CircularProgressLabel } from '@chakra-ui/react'
 
 function Features() {
   const dispatch = useDispatch();
@@ -196,7 +197,9 @@ function Features() {
     <div className={styles.requestContainer}>
       {/* Render loading indicator while users data is being fetched */}
       {usersLoading ? (
-        <div>Loading...</div>
+        <div className={styles.preLoad}>
+        <CircularProgress isIndeterminate size='100px' thickness='4px' />
+        </div>
       ) : (
         <>
 
@@ -252,14 +255,16 @@ function Features() {
 
           {/* Render loading indicator while features data is being fetched */}
           {featuresLoading ? (
-            <div>Loading...</div>
+            <div className={styles.preLoad}>
+        <CircularProgress isIndeterminate />
+        </div>
           ) : (
 
           <div className={styles.featuresListContainer}>
             <ul className={styles.featuresList}>
               {currentFeatures
               //toSort causing error as mutates the original array
-                .toSorted((a, b) => b.id - a.id) // Sort features by id
+                .toSorted((a, b) => b.votes.length - a.votes.length) // Sort features by number of votes
                 .map((feature) => (
                   <li key={feature.id}>
                     <div

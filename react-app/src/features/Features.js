@@ -201,7 +201,6 @@ function Features() {
         <InputLeftAddon>Description</InputLeftAddon>
          
           <Textarea
-            
             placeholder="description "
             type="text"
             name="description"

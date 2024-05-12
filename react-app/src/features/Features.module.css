@@ -146,8 +146,8 @@
 
 .featureDescriptionShow {
   grid-area: c;
-  background-color: #a2a9d1;
-  border-width: 1px;
+  background-color: #6a7297;
+  border-width: 2px;
   border-color: #9099b7;
 }
 
@@ -185,8 +185,9 @@
 
 .featureName h3 {
   font-size: 1rem;
-  font-weight: 400;
+  font-weight: 500;
   color: white;
+  text-transform: uppercase;
 }
 
 .featureUserId h4 {
